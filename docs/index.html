@@ -15,27 +15,13 @@
   <p id="authors">Anonymous authors<br>
   <span style="font-size: 18px">ECCV 2024 Submission - Paper ID: 10071
   </span></p>
-  <!-- <br>
-  <img src="./ptp_files/teaser.png" class="teaser-gif" style="width:100%;"><br>
-    <font size="+2">
-          <p style="text-align: center;">
-            <a href="./ptp_files/Prompt-to-Prompt_preprint.pdf" target="_blank">Paper</a> &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="https://github.com/google/prompt-to-prompt/" target="_blank">Code</a>
-          </p>
-    </font> -->
+
 </div>
-<!-- <div class="content">
-  <h2 style="text-align:center;">Abstract</h2>
-  <p>We present the first controllable and interpretable saliency prediction approach. This is achieved by incorporating saliency in a diffusion model. Specifically, we leverage a shared latent feature space between the image and saliency modalities to simultaneously generate image edits and predict saliency.
-    We utilize a saliency-guided cross-attention mechanism within the shared latent feature space that performs targeted edits on photometric properties such as contrast, brightness, and color. These edits improve saliency within the desired edited image regions, making our model controllable in the context of saliency
-    Our approach also allows a qualitative interpretation of the photometric properties on which the model bases its predictions. As shown by a user study, our method is able to predict the human visual attention patterns in the generated image edits. We demonstrate the performance of our approach on several saliency benchmarks.
-  </p>
-</div>
-<div class="content"> -->
+
 
 <div class="content">
   <h2 style="text-align:center;"></h2>
-  <p>Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness<sup><a href="#ref2">[2]</a></sup>, and color<sup><a href="#ref4">[4]</a></sup><sup><a href="#ref5">[5]</a></sup> as evidenced by cognitive studies on human visual attention<sup><a href="#ref1">[1]</a></sup>. We introduce a novel controllable and interpretable saliency prediction approach that leverages generated edits to these photometric properties. We focus on photometric edits that enhance the saliency of the most salient region that corresponds to a word from the prompt. We provide two examples for each edit in the following sections. Please use the sliders on the right to see the generated image edits and their saliency maps. We refer to the supplementary material for the comparison with the baselines.
+  <p> Saliency prediction models are constrained by the limited diversity and quantity of labeled data. Standard data augmentation techniques such as rotating, and cropping change the scene composition hence affecting saliency. In this work, we propose a novel data augmentation method for deep saliency prediction that involves editing natural images while retaining the complexity and variability of real-world visual scenes. Since saliency depends on both high-level and low-level features such as semantics and photometric properties, our approach involves learning both by incorporating photometric and semantic attributes such as color, contrast, brightness, and class. To that end, we introduce a saliency-guided cross-attention mechanism that enables targeted edits on the photometric properties, thereby enhancing saliency within specific image regions and providing controllability to our model in the context of saliency prediction. Our saliency predictions are highly aligned with human visual attention patterns in the edited images, as validated by a user study. 
   </p>
 </div>
 <div class="content">
@@ -45,14 +31,14 @@
 </div>
 <div class="content">
 <h2>Augmentation</h2>
-<p>We show our augmentation approach below.</p>
-<p>Using our method, we amplify the contrast of the giraffe in the video below. We also enhance the brightness as another type of augmentation. Our model can constrain excessively strong edits to prevent unnatural results.</p>
+<p>We provide an overview of our augmentation method below.</p>
+<p>Using our method, we amplify the contrast of the giraffe in the original image. We also enhance the brightness as another type of augmentation. Our model can constrain excessively strong edits to prevent unnatural results.</p>
 <div class="cat-hat-main">
     <div class="mybox">
         <video controls class="cat-hat-img" id="video0" style="width:1024px;height:512px;">
             <source src="./sal_diff_files/augment.mp4" type="video/mp4">
         </video><br>
-        <p style="text-align:center;">Augmentation</p>
+        <p style="text-align:center;">Augmentations</p>
     </div>
     
 </div>
@@ -61,7 +47,8 @@
 <div class="content">
 
 <h2>Saliency Guided Cross-Attention Mechanism</h2>
-<p>We extract cross-attention features from the input image and prompt, then multiply them with the initial saliency to create spatial attention maps. Each word generates a spatial attention map, and we select the one with the highest sum as the target editing region. These selected spatial maps are shown in Figure-4 in the main paper. We utilize prompts from the MS-COCO dataset and modify them as described in Section 3.5 during editing. We use the target region to edit and the edited image pairs to train the models with augmentation. We explain the training procedure below.</p>
+<p>We use a saliency guided cross-attention mechanism to localize the region that we aim to edit.</p>
+<p>We extract cross-attention features from the input image and prompt, then multiply them with the initial saliency to create spatial attention maps. Each word generates a spatial attention map, and we select the one with the highest sum as the target editing region. These selected spatial maps are shown in Figure-4 in the main paper. We utilize prompts from the MS-COCO dataset and modify them as described in Section 3.5 during editing. We use the target region to edit and the edited image pairs to train the models with augmentation which we explain in the following section.</p>
 <div class="cat-hat-main">
     <div class="mybox">
         <video controls class="cat-hat-img" id="video1" style="width:1024px;height:512px;">
@@ -76,15 +63,15 @@
 <div class="content">
 
 
-<h2>Training with augmentations</h2>
+<h2>Training with Augmentations</h2>
 <p>We show how we train the saliency prediction models with our augmented images.</p>
-<p> Given an image, saliency ground-truth and the target region to edit, we generate the image edits using our augmentation method. Then, we predict saliency for the original and the edited image respectively. Since our edits enhance saliency in the edited regions, we calculate BCE between the saliency prediction of the original and edited image. We penalize the models if they do not increase their saliency prediction over the edited regions. We show that our editing method enhances the saliency by a user study below. </p>
+<p> Given an image, saliency ground-truth and the target region to edit, we generate the image edits using our augmentation method. Then, we predict saliency for the original and the edited images respectively. Since our edits enhance saliency in the edited regions, we calculate the BCE between the saliency predictions of the original and edited images. That is, we penalize the models if they underestimate the saliency of the edited regions. We validate that our editing method enhances the saliency in the edited regions by a user study. </p>
 <div class="cat-hat-main">
     <div class="mybox">
         <video controls class="cat-hat-img" id="video2" style="width:1024px;height:512px;">
             <source src="./sal_diff_files/explain-loss.mp4" type="video/mp4">
         </video><br>
-        <p style="text-align:center;">Training with augmentations</p>
+        <p style="text-align:center;">Training with Augmentations</p>
     </div>
     
 </div>
@@ -93,9 +80,11 @@
 <div class="content">
 
 
-
-
-
+  <h2 style="text-align:center;"></h2>
+Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness<sup><a href="#ref2">[2]</a></sup>, and color<sup><a href="#ref4">[4]</a></sup><sup><a href="#ref5">[5]</a></sup> as evidenced by cognitive studies on human visual attention<sup><a href="#ref1">[1]</a></sup>. We focus on photometric edits that enhance the saliency of the most salient region that corresponds to a word from the prompt. We provide two examples for each edit in the following sections. Please use the sliders on the right to see the generated image edits and their saliency maps. We refer to the supplementary material for the comparison with the baselines.
+  </p>
+</div>
+<div class="content">
 
 
   <h2>Contrast</h2>

@@ -125,7 +125,7 @@
 
 <h2>Saliency Guided Cross-Attention Mechanism</h2>
 <p>We use a saliency guided cross-attention mechanism to localize the region that we aim to edit.</p>
-<p>We extract cross-attention features from the input image and prompt, then multiply them with the initial saliency to create spatial attention maps. Each word generates a spatial attention map, and we select the one with the highest sum as <span style="color: darkred; font-weight: bold;">the target editing region</span> . These selected spatial maps are shown in Figure-4 in the main paper. We utilize prompts from the MS-COCO dataset and modify them as described in Section 3.5 during editing. We use the target region to edit and the edited image pairs to train the models with augmentation which we explain in the following section.</p>
+<p>We extract cross-attention features from the input image and prompt, then multiply them with the initial saliency to create <span style="color: orange; font-weight: bold;">spatial attention maps</span>. Each word generates a spatial attention map, and we select the one with the highest sum as <span style="color: darkred; font-weight: bold;">the target editing region</span> . These selected spatial maps are shown in Figure-4 in the main paper. We provide the details on the editing process in Section 3.5 of the main paper. We use the target region to edit and the edited image pairs to train the models with augmentation which we explain in the following section.</p>
 <div class="cat-hat-main">
     <div class="mybox">
         <video controls class="cat-hat-img" id="video1" style="width:1024px;height:512px;">
@@ -142,7 +142,7 @@
 
 <h2>Training with Augmentations</h2>
 <p>We show how we train the saliency prediction models with our augmented images.</p>
-<p> Given an image, saliency ground-truth and the <span style="color: darkred; font-weight: bold;">target region to edit</span>, we generate the image edits using our augmentation method. Then, we predict saliency for the original and the edited images respectively. Since our edits enhance saliency in the edited regions, we calculate the Binary Cross Entropy (BCE) between the saliency predictions of the original and edited images. That is, we penalize the models if they underestimate the saliency of the edited regions. We validate that our editing method enhances the saliency in the edited regions by a user study. </p>
+<p> Given an image, saliency ground-truth and the target region to edit we generate the image edits using our augmentation method. Then, we predict saliency for the original and the <span style="color: darkred; font-weight: bold;">edited images</span>, respectively. Since our edits enhance saliency in the edited regions, we calculate the Binary Cross Entropy (BCE) between the saliency predictions of the original and edited images. That is, we penalize the models if they underestimate the saliency of the edited regions. We validate that our editing method enhances the saliency in the edited regions by a user study. </p>
 <div class="cat-hat-main">
     <div class="mybox">
         <video controls class="cat-hat-img" id="video2" style="width:1024px;height:512px;">
@@ -363,7 +363,7 @@ Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness
   <h2>Color </h2>
   <p>We show the edited images at different intensity levels for changing the color of the selected region to green on the left and their corresponding saliency predictions on the right.  </p>
 
-    <p> Here, we change the color of traffic light to green in the image below. Observe that, the saliency disperses towards the edited region. As the color intensifies, our odel is able to enhance the saliency prediction within these color-edited regions.
+    <p> Here, we change the color of traffic light to green in the image below. Observe that, the saliency disperses towards the edited region. As the color intensifies, our model is able to enhance the saliency prediction within these color-edited regions.
 
        </p>
     <div class="cat-hat-main">

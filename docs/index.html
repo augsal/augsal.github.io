@@ -1,3 +1,79 @@
+<style>
+    /* Style for slider */
+    .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 10px;
+        border-radius: 5px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        position: relative;
+    }
+
+    /* Style for slider thumb */
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+        position: relative;
+        z-index: 3;
+    }
+
+    /* Style for slider ticks */
+/*    .slider-container::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #999;
+        z-index: 1;
+    }*/
+
+    .slider-ticks {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 20px;
+    }
+
+    .slider-ticks::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #999;
+    }
+
+    .slider-tick {
+        position: absolute;
+        width: 2px;
+        height: 9px;
+        background-color: #999;
+        z-index: 2;
+    }
+
+    .slider-tick:nth-child(2) {
+        left: calc(50.00% - 0.5px);
+    }
+
+    .slider-tick:nth-child(3) {
+        left: calc(100.0% - 0.5px);
+    }
+</style>
+
+
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -11,7 +87,8 @@
 
 <body>
 <div class="content">
-  <h1>Data Augmentation via Latent Diffusion for Saliency Prediction - Interactive Visualization</h1>
+    <h1><strong>Data Augmentation via Latent Diffusion for Saliency Prediction </strong> <br> </h1>
+  <p id="authors">Interactive Visualization<br>
   <p id="authors">Anonymous authors<br>
   <span style="font-size: 18px">ECCV 2024 Submission - Paper ID: 10071
   </span></p>
@@ -26,7 +103,7 @@
 </div>
 <div class="content">
   <h2 style="text-align:center;"></h2>
-    TL;DR: We use latent diffusion to augment data for saliency prediction. We show our method improves the performance of existing saliency models. Moreover, we learn multilevel features that improve saliency prediction.
+    <strong> TL;DR </strong> We use latent diffusion to augment data for saliency prediction. We show our method improves the performance of existing saliency models. Moreover, we learn multilevel features that improve saliency prediction.
   </p>
 </div>
 <div class="content">
@@ -48,7 +125,7 @@
 
 <h2>Saliency Guided Cross-Attention Mechanism</h2>
 <p>We use a saliency guided cross-attention mechanism to localize the region that we aim to edit.</p>
-<p>We extract cross-attention features from the input image and prompt, then multiply them with the initial saliency to create spatial attention maps. Each word generates a spatial attention map, and we select the one with the highest sum as the target editing region. These selected spatial maps are shown in Figure-4 in the main paper. We utilize prompts from the MS-COCO dataset and modify them as described in Section 3.5 during editing. We use the target region to edit and the edited image pairs to train the models with augmentation which we explain in the following section.</p>
+<p>We extract cross-attention features from the input image and prompt, then multiply them with the initial saliency to create spatial attention maps. Each word generates a spatial attention map, and we select the one with the highest sum as <span style="color: darkred; font-weight: bold;">the target editing region</span> . These selected spatial maps are shown in Figure-4 in the main paper. We utilize prompts from the MS-COCO dataset and modify them as described in Section 3.5 during editing. We use the target region to edit and the edited image pairs to train the models with augmentation which we explain in the following section.</p>
 <div class="cat-hat-main">
     <div class="mybox">
         <video controls class="cat-hat-img" id="video1" style="width:1024px;height:512px;">
@@ -65,7 +142,7 @@
 
 <h2>Training with Augmentations</h2>
 <p>We show how we train the saliency prediction models with our augmented images.</p>
-<p> Given an image, saliency ground-truth and the target region to edit, we generate the image edits using our augmentation method. Then, we predict saliency for the original and the edited images respectively. Since our edits enhance saliency in the edited regions, we calculate the BCE between the saliency predictions of the original and edited images. That is, we penalize the models if they underestimate the saliency of the edited regions. We validate that our editing method enhances the saliency in the edited regions by a user study. </p>
+<p> Given an image, saliency ground-truth and the <span style="color: darkred; font-weight: bold;">target region to edit</span>, we generate the image edits using our augmentation method. Then, we predict saliency for the original and the edited images respectively. Since our edits enhance saliency in the edited regions, we calculate the Binary Cross Entropy (BCE) between the saliency predictions of the original and edited images. That is, we penalize the models if they underestimate the saliency of the edited regions. We validate that our editing method enhances the saliency in the edited regions by a user study. </p>
 <div class="cat-hat-main">
     <div class="mybox">
         <video controls class="cat-hat-img" id="video2" style="width:1024px;height:512px;">
@@ -105,17 +182,27 @@ Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness
          <p style="text-align:center;">  Our predictions  </p>
       </div>
          <br>
-         <div class="cat-hat-text">
-             <!-- <span style="display: block; text-align: center">"My <span id ="fluffy" style="background-color: #f88000;">fluffy</span> bunny doll." </span><br> -->
-             
-            <input type="range" min="1" max="3" value="1" class="slider" id="range0">
-                       <p> Please scroll here to visualize the changes in the saliency based on the photometric changes in the image.  </p>
+                <div class="cat-hat-text">
+                    <div class="slider-container">
+                        <input type="range" min="1" max="3" value="1" class="slider" id="range0">
+                    </div>
+                    <div class="slider-ticks">
+                        <div class="slider-tick"></div>        
+                        <div class="slider-tick"></div>
+                        <div class="slider-tick"></div>
+                    </div>
 
-            </div>
-    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <label for="range3" style="text-align: left;">1</label>
+                        <label for="range3" style="text-align: center;">2</label>
+                        <label for="range3" style="text-align: right;">3</label>
+                    </div>
+                    <p>Please use the slider to visualize the changes in the saliency based on the photometric changes in the image.</p>
+                </div>
+        </div>
   <br>
-</div>
-<div class="content">
+<!-- </div>
+<div class="content"> -->
 
   <h2>Contrast </h2>
   <p>We show the edited images at different intensity levels for enhancing contrast on the left and their corresponding saliency predictions on the right.  </p>
@@ -134,14 +221,24 @@ Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness
       </div>
     
          <br>
-         <div class="cat-hat-text">
-             <!-- <span style="display: block; text-align: center">"My <span id ="fluffy" style="background-color: #f88000;">fluffy</span> bunny doll." </span><br> -->
-             
-            <input type="range" min="1" max="3" value="1" class="slider" id="range1">
-                                   <p> Please scroll here to visualize the changes in the saliency based on the photometric changes in the image.  </p>
+                  <div class="cat-hat-text">
+               <div class="slider-container">
+                <input type="range" min="1" max="3" value="1" class="slider" id="range1">
+                </div>
+                <div class="slider-ticks">
+                    <div class="slider-tick"></div>        
+                    <div class="slider-tick"></div>
+                    <div class="slider-tick"></div>
+                </div>
 
-            </div>
-    </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <label for="range3" style="text-align: left;">1</label>
+                    <label for="range3" style="text-align: center;">2</label>
+                    <label for="range3" style="text-align: right;">3</label>
+                </div>
+                <p>Please use the slider to visualize the changes in the saliency based on the photometric changes in the image.</p>
+                </div>
+        </div>
   <br>
 </div>
 <div class="content">
@@ -162,17 +259,27 @@ Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness
         <p style="text-align:center;">   Our predictions </p>
       </div>
        <br>
-         <div class="cat-hat-text">
-             <!-- <span style="display: block; text-align: center">"My <span id ="fluffy" style="background-color: #f88000;">fluffy</span> bunny doll." </span><br> -->
-             
-            <input type="range" min="1" max="3" value="1" class="slider" id="range2">
-                                   <p> Please scroll here to visualize the changes in the saliency based on the photometric changes in the image.  </p>
+                  <div class="cat-hat-text">
+               <div class="slider-container">
+                <input type="range" min="1" max="3" value="1" class="slider" id="range2">
+                </div>
+                <div class="slider-ticks">
+                    <div class="slider-tick"></div>        
+                    <div class="slider-tick"></div>
+                    <div class="slider-tick"></div>
+                </div>
 
-            </div>
-    </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <label for="range3" style="text-align: left;">1</label>
+                    <label for="range3" style="text-align: center;">2</label>
+                    <label for="range3" style="text-align: right;">3</label>
+                </div>
+                <p>Please use the slider to visualize the changes in the saliency based on the photometric changes in the image.</p>
+                </div>
+        </div>
   <br>
-</div>
-<div class="content">
+<!-- </div>
+<div class="content"> -->
 
   <h2>Brightness </h2>
   <p>We show the edited images at different intensity levels for enhancing brightness on the left and their corresponding saliency predictions on the right.  </p>
@@ -193,13 +300,23 @@ Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness
         </div>
          <br>
          <div class="cat-hat-text">
-             <!-- <span style="display: block; text-align: center">"My <span id ="fluffy" style="background-color: #f88000;">fluffy</span> bunny doll." </span><br> -->
-             
-            <input type="range" min="1" max="3" value="1" class="slider" id="range3">
-                                   <p> Please scroll here to visualize the changes in the saliency based on the photometric changes in the image.  </p>
+               <div class="slider-container">
+                <input type="range" min="1" max="3" value="1" class="slider" id="range3">
+                </div>
+                <div class="slider-ticks">
+                    <div class="slider-tick"></div>        
+                    <div class="slider-tick"></div>
+                    <div class="slider-tick"></div>
+                </div>
 
-            </div>
-    </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <label for="range3" style="text-align: left;">1</label>
+                    <label for="range3" style="text-align: center;">2</label>
+                    <label for="range3" style="text-align: right;">3</label>
+                </div>
+                <p>Please use the slider to visualize the changes in the saliency based on the photometric changes in the image.</p>
+                </div>
+        </div>
   <br>
 </div>
 <div class="content">
@@ -222,16 +339,26 @@ Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness
       </div>
          <br>
          <div class="cat-hat-text">
-             <!-- <span style="display: block; text-align: center">"My <span id ="fluffy" style="background-color: #f88000;">fluffy</span> bunny doll." </span><br> -->
-             
-            <input type="range" min="1" max="3" value="1" class="slider" id="range4">
-                                   <p> Please scroll here to visualize the changes in the saliency based on the photometric changes in the image.  </p>
+               <div class="slider-container">
+                <input type="range" min="1" max="3" value="1" class="slider" id="range4">
+                </div>
+                <div class="slider-ticks">
+                    <div class="slider-tick"></div>        
+                    <div class="slider-tick"></div>
+                    <div class="slider-tick"></div>
+                </div>
 
-            </div>
-    </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <label for="range3" style="text-align: left;">1</label>
+                    <label for="range3" style="text-align: center;">2</label>
+                    <label for="range3" style="text-align: right;">3</label>
+                </div>
+                <p>Please use the slider to visualize the changes in the saliency based on the photometric changes in the image.</p>
+                </div>
+        </div>
   <br>
-</div>
-<div class="content">
+<!-- </div>
+<div class="content"> -->
 
   <h2>Color </h2>
   <p>We show the edited images at different intensity levels for changing the color of the selected region to green on the left and their corresponding saliency predictions on the right.  </p>
@@ -252,13 +379,23 @@ Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness
         </div>
          <br>
          <div class="cat-hat-text">
-             <!-- <span style="display: block; text-align: center">"My <span id ="fluffy" style="background-color: #f88000;">fluffy</span> bunny doll." </span><br> -->
-             
-            <input type="range" min="1" max="3" value="1" class="slider" id="range5">
-                                   <p> Please scroll here to visualize the changes in the saliency based on the photometric changes in the image.  </p>
+               <div class="slider-container">
+                <input type="range" min="1" max="3" value="1" class="slider" id="range5">
+                </div>
+                <div class="slider-ticks">
+                    <div class="slider-tick"></div>        
+                    <div class="slider-tick"></div>
+                    <div class="slider-tick"></div>
+                </div>
 
-            </div>
-    </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <label for="range3" style="text-align: left;">1</label>
+                    <label for="range3" style="text-align: center;">2</label>
+                    <label for="range3" style="text-align: right;">3</label>
+                </div>
+                <p>Please use the slider to visualize the changes in the saliency based on the photometric changes in the image.</p>
+                </div>
+        </div>
   <br>
 </div>
 <div class="content">
@@ -282,13 +419,23 @@ Saliency is influenced by contrast<sup><a href="#ref3">[3]</a></sup>, brightness
       </div>
          <br>
          <div class="cat-hat-text">
-             <!-- <span style="display: block; text-align: center">"My <span id ="fluffy" style="background-color: #f88000;">fluffy</span> bunny doll." </span><br> -->
-             
-            <input type="range" min="1" max="3" value="1" class="slider" id="range6">
-                                   <p> Please scroll here to visualize the changes in the saliency based on the photometric changes in the image.  </p>
+               <div class="slider-container">
+                <input type="range" min="1" max="3" value="1" class="slider" id="range6">
+                </div>
+                <div class="slider-ticks">
+                    <div class="slider-tick"></div>        
+                    <div class="slider-tick"></div>
+                    <div class="slider-tick"></div>
+                </div>
 
-            </div>
-    </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <label for="range3" style="text-align: left;">1</label>
+                    <label for="range3" style="text-align: center;">2</label>
+                    <label for="range3" style="text-align: right;">3</label>
+                </div>
+                <p>Please use the slider to visualize the changes in the saliency based on the photometric changes in the image.</p>
+                </div>
+        </div>
   <br>
 
 
